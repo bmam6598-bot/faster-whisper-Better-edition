@@ -15,6 +15,7 @@ import queue
 from pathlib import Path
 from datetime import datetime
 import logging
+import webbrowser
 
 import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
@@ -80,11 +81,16 @@ class FasterWhisperGUI:
         style = ttk.Style()
         style.theme_use('clam')
         
-        # Title
+        # Title with Thank You Message
         title_frame = ttk.Frame(self.root)
         title_frame.pack(fill=tk.X, padx=10, pady=10)
         ttk.Label(title_frame, text="⚡ Faster Whisper Transcriber", 
                  font=("Helvetica", 16, "bold")).pack(side=tk.LEFT)
+        
+        # Thank you button
+        thank_you_btn = ttk.Button(title_frame, text="❤️ Our Promise", 
+                                  command=self.show_thank_you_message)
+        thank_you_btn.pack(side=tk.RIGHT, padx=5)
         
         # Settings Frame
         settings_frame = ttk.LabelFrame(self.root, text="Settings", padding=10)
@@ -204,6 +210,53 @@ class FasterWhisperGUI:
                   command=self.save_output).pack(side=tk.LEFT, padx=5)
         ttk.Button(button_frame, text="🗑️ Clear", 
                   command=self.clear_output).pack(side=tk.LEFT, padx=5)
+        
+    def show_thank_you_message(self):
+        """Show thank you message with support information"""
+        thank_you_text = """Thank you for trusting us with your voice! 🎤
+
+We promise: We will ONLY use it for transcription on YOUR device.
+
+❌ Just kidding - we would NEVER do anything else with your voice data!
+(We're too deep in debt to invest in AI models anyway 😅)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💡 Support Someone Inspiring:
+
+There's an amazing creator (Selcuk) who built 
+"Neon Lights AI" - check them out and support their work!
+
+🔗 Visit their TikTok:
+https://www.tiktok.com/@www.heyselcuk.com/photo/7656699523129036035
+
+📱 Scan the QR code in the video or 
+visit their GoFundMe to support their projects!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Your Voice. Your Privacy. Your Control. ❤️
+"""
+        
+        # Create a message window
+        msg_window = tk.Toplevel(self.root)
+        msg_window.title("❤️ Our Promise to You")
+        msg_window.geometry("500x400")
+        
+        # Text widget with message
+        text_widget = tk.Text(msg_window, wrap=tk.WORD, font=("Arial", 10), bg="#f5f5f5")
+        text_widget.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+        text_widget.insert(tk.END, thank_you_text)
+        text_widget.config(state=tk.DISABLED)
+        
+        # Button frame
+        btn_frame = ttk.Frame(msg_window)
+        btn_frame.pack(fill=tk.X, padx=10, pady=10)
+        
+        ttk.Button(btn_frame, text="🔗 Visit Selcuk's TikTok", 
+                  command=lambda: webbrowser.open("https://www.tiktok.com/@www.heyselcuk.com/photo/7656699523129036035")).pack(side=tk.LEFT, padx=5)
+        ttk.Button(btn_frame, text="Close", 
+                  command=msg_window.destroy).pack(side=tk.LEFT, padx=5)
         
     def setup_drag_drop(self, frame):
         """Setup drag and drop functionality"""
